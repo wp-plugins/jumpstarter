@@ -7,53 +7,15 @@ Stable tag: 17.0
 License: Unlicense
 License URI: http://unlicense.org
 
-Jumpstarter WordPress integration plugin that simplifies running WordPress in a container environment.
+Jumpstarter WordPress integration plugin for running WordPress in a container environment.
 
 == Description ==
 
-This is a plugin for WordPress installations in a Jumpstarter container environment. The main purpose is to
-combat the problems one encounters when running WordPress in a container environment under nginx behind multiple
+WordPress Jumpstarter integration for the Jumpstarter container environment. The main purpose is to
+mitigate the problems encountered when running WordPress in a container environment using nginx behind multiple
 http proxy layers.
 
-The plugin is divided into two distinct parts.
-
-1. The installer/environment synchronizer (`js-init.php`).
-2. The actual plugin (`jumpstarter.php`).
-
-= The installer =
-
-The installer takes care of the following:
-
-1. Install WordPress if `/app/code/wp-db` does not exist.
-2. Sync the `/app/env.json` and `/app/code/wp-env.json` environments with WordPress.
-
-Install is done the following way:
-
-1. Configure security salts in `wp-config.php` if not done already.
-2. Clean up previous failed or aborted installations.
-3. Install WordPress to RAM (in `/tmp`) to get rid of waiting for disk sync.
-4. Activating core plugins (`jumpstarter` and `sqlite-integration`).
-5. Setting the theme specified in `wp-env.json`.
-6. Run WordPress install hooks registered with `add_action("jumpstarter_install",...)`.
-7. Atomically move the database in place. This allows the install to be idempotent.
-8. Restart by execve'ing itself so environment sync can run.
-
-Environment sync is done the following way:
-
-1. Setting nginx `fastcgi_param HTTPS` to "on"/"off" depending on configured domains for the container.
-2. Opening and parsing `/app/code/wp-env.json`.
-3. If the `siteurl` has changed it performs a safe search/replace of `siteurl` in `wp_posts`, `wp_postmeta` and `wp_options`.
-4. Set theme specified in `theme` if not changed by the user.
-5. Update options specified in `options`.
-6. Opening and parsing `/app/env.json`.
-7. Update user details if they are admin default.
-8. Call the hook `jumpstarter_sync_env` to let themes/plugins modify database state depending on the env.
-
-It also prints logging and error information to `stderr`.
-
-= The plugin =
-
-The plugin takes care of the following:
+= Features =
 
 - Sandboxes all users and overrides any user capabilities defined in `/app/code/wp-env.json`.
 - Injects a login link to support Jumpstarter [reflected login](https://github.com/jumpstarter-io/help/wiki/App-Portals#reflected-login) on `/wp-login.php`.
