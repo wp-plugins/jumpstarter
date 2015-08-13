@@ -3,7 +3,7 @@ Contributors: jumpstarter, zeuclas
 Tags: jumpstarter, url handling
 Requires at least: 4.2
 Tested up to: 4.2.5-alpha
-Stable tag: trunk
+Stable tag: 17.0
 License: Unlicense
 License URI: http://unlicense.org
 
